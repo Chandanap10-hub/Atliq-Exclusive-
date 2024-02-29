@@ -30,7 +30,7 @@ ON
     gp_2020.product_code = gp_2021.product_code;
     
 select *from output;
-/* the percentage of unique product increase in 2021 vs. 2020*/
+/* all the unique product counts for each  segment */
 SELECT segment, COUNT(DISTINCT product_code) AS product_count
 FROM dim_product
 GROUP BY segment
