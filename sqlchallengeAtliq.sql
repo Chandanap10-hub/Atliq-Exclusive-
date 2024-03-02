@@ -7,7 +7,7 @@ select *from fact_manufacturing_cost;
 select *from fact_pre_invoice_deductions;
 select *from fact_sales_monthly;
 /*list of markets in which customer  "Atliq  Exclusive"  operates its business in the  APAC  region.*/ 
-select market from dim_customer where customer='Atliq Exclusive' and region='APAC';
+select distinct(market) from dim_customer where customer='Atliq Exclusive' and region='APAC';
 
 /*percentage of unique product increase in 2021 vs. 2020*/
 
@@ -31,12 +31,6 @@ ON
     
 select *from output;
 /* all the unique product counts for each  segment */
-SELECT segment, COUNT(DISTINCT product_code) AS product_count
-FROM dim_product
-GROUP BY segment
-ORDER BY product_count DESC;
-
-select segment,count(distinct product_code)  from dim_product group by segment;
 WITH product_counts AS (
     SELECT 
         segment,
@@ -45,7 +39,15 @@ WITH product_counts AS (
     FROM dim_product
     WHERE YEAR(fiscal_year) IN (2020, 2021)
     GROUP BY segment
-    )
+)
+
+SELECT 
+    segment,
+    COUNT(DISTINCT product_code) AS total_product_count
+FROM dim_product
+GROUP BY segment
+ORDER BY total_product_count DESC;
+
 
 /*segment had the most increase in unique products in 
 2021 vs 2020*/
