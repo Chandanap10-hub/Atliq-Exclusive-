@@ -1,4 +1,7 @@
 /*Analyzing the data*/
+USE `gdb023`;
+
+/*Analyzing the data*/
 show tables;
 select *from dim_customer;
 select *from dim_product;
@@ -72,6 +75,7 @@ ORDER BY
     difference DESC
 LIMIT 1;
 /* products that have the highest and lowest manufacturing costs.*/
+-- Query 1: Retrieve highest and lowest manufacturing costs for each product
 SELECT 
     dp.product_code,
     dp.product,
@@ -83,7 +87,7 @@ INNER JOIN
 ON 
     dp.product_code = fmc.product_code
 
-UNION
+UNION ALL
 
 SELECT 
     dp.product_code,
@@ -95,10 +99,9 @@ INNER JOIN
     (SELECT product_code, manufacturing_cost FROM fact_manufacturing_cost ORDER BY manufacturing_cost ASC LIMIT 1) AS fmc
 ON 
     dp.product_code = fmc.product_code;
-select customer_market.customer_code,customer_market.customer,average_discount_percentage from
-  (select market,customer from dim_customer where market='India') as customer_market
-  inner join (select avg(pre_invoice_discount)from fact_pre_invoice_deductions where fiscal_year=2021) as avergae_discount_percentage order by average_discount_percentage
-on customer_market.customer_code=averagelimit 5;
+
+
+
 /* the top 5 customers who received an 
 average high  pre_invoice_discount_pct  for the  fiscal  year 2021  and in the 
 Indian  market.*/
@@ -137,6 +140,7 @@ GROUP BY
     DATE_FORMAT(fsm.date, '%Y-%m'), fsm.fiscal_year, fsm.date
 ORDER BY 
     fsm.fiscal_year, MONTH(fsm.date);
+
 /* which quarter of 2020, got the maximum total_sold_quantity?*/
 SELECT
     CASE
@@ -156,6 +160,7 @@ GROUP BY
 ORDER BY
     total_sold_quantity DESC
 LIMIT 1;
+
 /*Which channel helped to bring more gross sales in the fiscal year 2021 
 and the percentage of contribution?*/ 
 SELECT 
@@ -177,6 +182,7 @@ GROUP BY
 ORDER BY
     gross_sales_mln DESC
 LIMIT 1;
+
 /*Top 3 products in each division that have a high 
 total_sold_quantity in the fiscal_year 2021*/
 SELECT 
